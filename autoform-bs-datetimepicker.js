@@ -22,19 +22,20 @@ AutoForm.addInputType("bootstrap-datetimepicker", {
       return m;
     }
     
-    var timezoneId = this.attr("data-timezone-id");
-    // default is local, but if there's a timezoneId, we use that
-    if (typeof timezoneId === "string") {
-      if (typeof moment.tz !== "function") {
-        throw new Error("If you specify a timezoneId, make sure that you've added a moment-timezone package to your app");
-      }
-      m = moment.tz(AutoForm.Utility.dateToNormalizedLocalDateAndTimeString(m.toDate()), timezoneId);
-    }
     return m.toDate();
   },
   valueConverters: {
     "string": function (val) {
-      return (val instanceof Date) ? val.toString() : val;
+      var timezoneId = this.attr("data-timezone-id");
+    
+      var format = this.data("DateTimePicker").format();
+      var result = val;
+      if (val instanceof Date) {
+        // default is local, but if there's a timezoneId, we use that
+        result = typeof timezoneId === "string" ? moment(val).tz(timezoneId).format(format) : moment(val).format(format);
+      }
+      
+      return result;
     },
     "stringArray": function (val) {
       if (val instanceof Date) {
@@ -97,7 +98,7 @@ Template.afBootstrapDateTimePicker.rendered = function () {
     var data = Template.currentData();
     var dtp = $input.data("DateTimePicker");
     // set field value
-    if (data.value instanceof Date) {
+    if (data.value instanceof Date || data.value instanceof moment) {
       dtp.date(data.value);
     } else {
       dtp.date(); // clear
