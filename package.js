@@ -5,10 +5,21 @@ Package.describe({
   git: 'https://github.com/aldeed/meteor-autoform-bs-datetimepicker.git'
 });
 
+
+Npm.depends({
+    // jquery: "3.3.1",
+    // "bootstrap-datepicker": "1.8.0",
+    "bootstrap-datetime-picker": "2.4.4",
+});
+
+
 Package.onUse(function(api) {
+  api.versionsFrom("1.7.0.3");
+
+  api.use('ecmascript');
   api.use('templating@1.0.0');
   api.use('blaze@2.0.0');
-  api.use('aldeed:autoform@4.0.0 || 5.0.0 || 6.0.0');
+  api.use('aldeed:autoform@6.2.0');
 
   // Ensure momentjs packages load before this one if used
   api.use('momentjs:moment@2.8.4', 'client', {weak: true});

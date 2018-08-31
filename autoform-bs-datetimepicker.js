@@ -99,11 +99,27 @@ Template.afBootstrapDateTimePicker.rendered = function () {
 
   // instanciate datetimepicker
   $input.datetimepicker(opts);
+  $input.on('dp.change', function (foo, bar, bla) {
+    var dtp = $input.data("DateTimePicker");
+    dtp.format('MM.YYYY');
+    window.$($input[0]).change();
+    setTimeout(function() {
+      dtp.format('MM.YYYY');
+      $input.change();
+      $input.data('changed', 'true');
+    }, 100);
+
+    // $input[0].value = JSON.stringify(sliderElem.noUiSlider.get());
+    $input.change();
+    $input.data('changed', 'true');
+
+  });
 
   // set and reactively update values
   this.autorun(function () {
     var data = Template.currentData();
     var dtp = $input.data("DateTimePicker");
+
     // set field value
     if (data.value instanceof Date || data.value instanceof moment) {
       dtp.date(data.value);
@@ -111,15 +127,19 @@ Template.afBootstrapDateTimePicker.rendered = function () {
       dtp.date(); // clear
     }
 
+    dtp.format('MM.YYYY');
+
     // set start date if there's a min in the schema
     if (data.min instanceof Date) {
-      dtp.setMinDate(data.min);
+      dtp.minDate(data.min);
     }
 
     // set end date if there's a max in the schema
     if (data.max instanceof Date) {
-      dtp.setMaxDate(data.max);
+      dtp.maxDate(data.max);
     }
+
+    dtp.format('MM.YYYY');
   });
 
 };
