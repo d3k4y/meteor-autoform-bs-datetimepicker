@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 AutoForm.addInputType("bootstrap-datetimepicker", {
   template: "afBootstrapDateTimePicker",
   valueIn: function (val, atts) {
@@ -97,14 +98,22 @@ Template.afBootstrapDateTimePicker.rendered = function () {
     opts.defaultDate = null;
   }
 
+  var updateOpts = function(dtp) {
+    _.keys(opts).forEach(key => {
+      switch (key) {
+        case 'format': dtp.format(opts[key]);
+      }
+    });
+  };
+
   // instanciate datetimepicker
   $input.datetimepicker(opts);
   $input.on('dp.change', function (foo, bar, bla) {
     var dtp = $input.data("DateTimePicker");
-    dtp.format('MM.YYYY');
+    updateOpts(dtp);
     window.$($input[0]).change();
     setTimeout(function() {
-      dtp.format('MM.YYYY');
+      updateOpts(dtp);
       $input.change();
       $input.data('changed', 'true');
     }, 100);
@@ -112,7 +121,6 @@ Template.afBootstrapDateTimePicker.rendered = function () {
     // $input[0].value = JSON.stringify(sliderElem.noUiSlider.get());
     $input.change();
     $input.data('changed', 'true');
-
   });
 
   // set and reactively update values
@@ -127,8 +135,6 @@ Template.afBootstrapDateTimePicker.rendered = function () {
       dtp.date(); // clear
     }
 
-    dtp.format('MM.YYYY');
-
     // set start date if there's a min in the schema
     if (data.min instanceof Date) {
       dtp.minDate(data.min);
@@ -139,7 +145,7 @@ Template.afBootstrapDateTimePicker.rendered = function () {
       dtp.maxDate(data.max);
     }
 
-    dtp.format('MM.YYYY');
+    updateOpts(dtp);
   });
 
 };
