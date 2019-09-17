@@ -1,5 +1,5 @@
 Package.describe({
-  name: 'aldeed:autoform-bs-datetimepicker',
+  name: 'd3k4y:autoform-bs-datetimepicker',
   summary: 'Custom bootstrap-datetimepicker input type with timezone support for AutoForm',
   version: '1.0.8',
   git: 'https://github.com/aldeed/meteor-autoform-bs-datetimepicker.git'
